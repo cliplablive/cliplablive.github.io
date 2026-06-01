@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ClipBot TikTok Callback</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: #101114;
+      color: #f4f4f5;
+      line-height: 1.6;
+    }
+    main {
+      width: min(760px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 56px 0;
+    }
+    code {
+      display: block;
+      padding: 16px;
+      border: 1px solid #2a2d35;
+      background: #181a20;
+      color: #35e6a3;
+      overflow-wrap: anywhere;
+    }
+    a { color: #35e6a3; font-weight: 700; }
+  </style>
+</head>
+<body>
+  <main>
+    <p><a href="./index.html">Back to ClipBot</a></p>
+    <h1>TikTok authorization callback</h1>
+    <p>
+      This page receives TikTok OAuth callback parameters for ClipBot review and
+      testing. Copy the full URL if a manual authorization-code handoff is needed.
+    </p>
+    <code id="callback-url"></code>
+  </main>
+  <script>
+    document.getElementById('callback-url').textContent = window.location.href;
+  </script>
+</body>
+</html>
