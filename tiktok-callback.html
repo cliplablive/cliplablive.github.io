@@ -3,7 +3,10 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>ClipBot TikTok Callback</title>
+  <title>ClipLab Live TikTok Callback</title>
+  <link rel="icon" href="./favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" href="./clipbot-icon-32.png" sizes="32x32">
+  <link rel="apple-touch-icon" href="./clipbot-icon-192.png">
   <style>
     body {
       margin: 0;
@@ -25,16 +28,22 @@
       color: #35e6a3;
       overflow-wrap: anywhere;
     }
-    a { color: #35e6a3; font-weight: 700; }
+    .brand { display: inline-flex; align-items: center; gap: 12px; color: #f4f4f5; font-size: 22px; font-weight: 800; text-decoration: none; }
+    .brand img { width: 44px; height: 44px; border-radius: 50%; display: block; }
+    a { color: #29d8ff; font-weight: 700; }
   </style>
 </head>
 <body>
   <main>
-    <p><a href="./index.html">Back to ClipBot</a></p>
+    <a class="brand" href="./index.html" aria-label="ClipLab Live home">
+      <img src="./clipbot-icon.png" alt="ClipLab Live app icon">
+      <span>ClipLab Live</span>
+    </a>
+    <p><a href="./index.html">Back to ClipLab Live</a></p>
     <h1>TikTok authorization callback</h1>
     <p>
-      This page receives TikTok OAuth callback parameters for ClipBot review and
-      testing. Copy the full URL if a manual authorization-code handoff is needed.
+      This page receives TikTok OAuth callback parameters for ClipLab Live
+      authorization. Copy the full URL if a manual authorization-code handoff is needed.
     </p>
     <code id="callback-url"></code>
   </main>

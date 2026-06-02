@@ -3,16 +3,20 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>ClipBot</title>
-  <meta name="description" content="ClipBot helps creators prepare and publish short-form livestream highlight videos.">
+  <title>ClipLab Live</title>
+  <meta name="description" content="ClipLab Live is a creator publishing platform for short-form livestream highlights.">
+  <link rel="icon" href="./favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" href="./clipbot-icon-32.png" sizes="32x32">
+  <link rel="apple-touch-icon" href="./clipbot-icon-192.png">
   <style>
     :root {
       color-scheme: dark;
       --bg: #101114;
       --panel: #181a20;
       --text: #f4f4f5;
-      --muted: #b7bac3;
-      --accent: #35e6a3;
+      --muted: #c4c7cf;
+      --accent: #29d8ff;
+      --accent-2: #ff514f;
       --line: #2a2d35;
     }
     * { box-sizing: border-box; }
@@ -24,7 +28,7 @@
       line-height: 1.55;
     }
     header, main, footer {
-      width: min(920px, calc(100% - 32px));
+      width: min(980px, calc(100% - 32px));
       margin: 0 auto;
     }
     header {
@@ -32,13 +36,23 @@
       align-items: center;
       justify-content: space-between;
       gap: 24px;
-      padding: 26px 0;
+      padding: 24px 0;
       border-bottom: 1px solid var(--line);
     }
     .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: var(--text);
       font-size: 22px;
       font-weight: 800;
       letter-spacing: 0;
+    }
+    .brand img {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      display: block;
     }
     nav {
       display: flex;
@@ -51,20 +65,41 @@
       font-weight: 700;
     }
     main {
-      padding: 64px 0 52px;
+      padding: 58px 0 52px;
     }
     h1 {
-      max-width: 760px;
+      max-width: 820px;
       margin: 0 0 18px;
-      font-size: clamp(38px, 7vw, 68px);
-      line-height: 1;
+      font-size: clamp(36px, 6vw, 64px);
+      line-height: 1.03;
       letter-spacing: 0;
     }
     .lead {
-      max-width: 760px;
+      max-width: 800px;
       margin: 0 0 38px;
       color: var(--muted);
       font-size: 20px;
+    }
+    .actions {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+      margin-bottom: 44px;
+    }
+    .button {
+      display: inline-flex;
+      align-items: center;
+      min-height: 44px;
+      padding: 0 18px;
+      border-radius: 6px;
+      background: var(--accent);
+      color: #061116;
+      font-weight: 800;
+    }
+    .button.secondary {
+      background: transparent;
+      color: var(--text);
+      border: 1px solid var(--line);
     }
     section {
       padding: 28px 0;
@@ -73,6 +108,7 @@
     h2 {
       margin: 0 0 12px;
       font-size: 24px;
+      letter-spacing: 0;
     }
     p, li {
       color: var(--muted);
@@ -88,12 +124,19 @@
       color: var(--muted);
       font-size: 14px;
     }
+    @media (max-width: 680px) {
+      header { align-items: flex-start; flex-direction: column; }
+      main { padding-top: 40px; }
+    }
   </style>
 </head>
 <body>
   <header>
-    <div class="brand">ClipBot</div>
-    <nav aria-label="Legal links">
+    <a class="brand" href="./index.html" aria-label="ClipLab Live home">
+      <img src="./clipbot-icon.png" alt="ClipLab Live app icon">
+      <span>ClipLab Live</span>
+    </a>
+    <nav aria-label="Site links">
       <a href="./privacy.html">Privacy Policy</a>
       <a href="./terms.html">Terms of Service</a>
       <a href="mailto:solet3rminator@gmail.com">Contact</a>
@@ -101,43 +144,58 @@
   </header>
 
   <main>
-    <h1>Short-form livestream highlight publishing for creators.</h1>
+    <h1>Short-form livestream highlights for creators and publishing teams.</h1>
     <p class="lead">
-      ClipBot helps creators prepare vertical gaming and livestream clips with captions,
-      titles, hashtags, source credit, and private review before publishing.
+      ClipLab Live helps creators turn approved livestream moments into vertical clips
+      with captions, titles, hashtags, source credit, and platform-ready publishing.
     </p>
+    <div class="actions">
+      <a class="button" href="mailto:solet3rminator@gmail.com">Request Access</a>
+      <a class="button secondary" href="./privacy.html">Review Privacy Policy</a>
+    </div>
 
     <section>
-      <h2>What ClipBot Does</h2>
+      <h2>What The Platform Does</h2>
       <p>
-        ClipBot is a private creator workflow for generating and reviewing short vertical
-        highlight videos. The creator can preview each generated clip, approve its caption
-        and hashtags, then upload or publish it to connected social accounts.
+        ClipLab Live provides a workflow for preparing short video highlights from creator
+        livestreams and distributing approved clips to connected social accounts. The
+        platform focuses on vertical formatting, readable captions, metadata, and reliable
+        upload tracking.
       </p>
     </section>
 
     <section>
       <h2>TikTok Integration</h2>
       <p>
-        The TikTok integration uses OAuth authorization and the Content Posting API so the
-        authenticated creator can send approved videos to their own TikTok account. Testing
-        is performed with private or draft uploads before public publishing is enabled.
+        The TikTok integration uses OAuth authorization and the Content Posting API so an
+        authenticated creator or authorized publishing team can upload approved videos to
+        the connected TikTok account. ClipLab Live does not request account passwords and
+        does not publish without platform authorization.
       </p>
     </section>
 
     <section>
-      <h2>Creator Controls</h2>
+      <h2>Publishing Controls</h2>
       <ul>
-        <li>OAuth login is required before TikTok uploads.</li>
-        <li>The creator reviews clips before publishing.</li>
-        <li>Captions and hashtags can be checked before upload.</li>
-        <li>Generated video files can be deleted after successful publishing.</li>
+        <li>OAuth is required before TikTok uploads are available.</li>
+        <li>Generated captions, titles, source credit, and hashtags are stored with each clip.</li>
+        <li>Publishing status is tracked so failed uploads can be reviewed and retried.</li>
+        <li>Local generated video files can be deleted after successful publishing.</li>
       </ul>
+    </section>
+
+    <section>
+      <h2>Responsible Use</h2>
+      <p>
+        Users must publish only content they own, are authorized to use, or are otherwise
+        permitted to distribute. ClipLab Live is designed for lawful creator publishing and
+        respects platform policies, takedown requests, and source attribution requirements.
+      </p>
     </section>
   </main>
 
   <footer>
-    <span>ClipBot - Creator publishing workflow. Contact: solet3rminator@gmail.com</span>
+    <span>ClipLab Live - Creator publishing platform. Contact: solet3rminator@gmail.com</span>
   </footer>
 </body>
 </html>
