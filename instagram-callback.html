@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ClipLab Live Instagram Callback</title>
+  <link rel="icon" href="./favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" href="./clipbot-icon-32.png" sizes="32x32">
+  <link rel="apple-touch-icon" href="./clipbot-icon-192.png">
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: #101114;
+      color: #f4f4f5;
+      line-height: 1.6;
+    }
+    main {
+      width: min(760px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 56px 0;
+    }
+    code {
+      display: block;
+      padding: 16px;
+      border: 1px solid #2a2d35;
+      background: #181a20;
+      color: #35e6a3;
+      overflow-wrap: anywhere;
+    }
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      color: #f4f4f5;
+      font-size: 22px;
+      font-weight: 800;
+      text-decoration: none;
+    }
+    .brand img {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      display: block;
+    }
+    a {
+      color: #29d8ff;
+      font-weight: 700;
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <a class="brand" href="./index.html" aria-label="ClipLab Live home">
+      <img src="./clipbot-icon.png" alt="ClipLab Live app icon">
+      <span>ClipLab Live</span>
+    </a>
+    <p><a href="./index.html">Back to ClipLab Live</a></p>
+    <h1>Instagram authorization callback</h1>
+    <p>
+      This page receives Instagram OAuth callback parameters for ClipLab Live
+      authorization. Copy the full URL if a manual authorization-code handoff is needed.
+    </p>
+    <code id="callback-url"></code>
+  </main>
+  <script>
+    document.getElementById('callback-url').textContent = window.location.href;
+  </script>
+</body>
+</html>
