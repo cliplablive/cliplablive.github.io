@@ -52,21 +52,21 @@
     <span class="badge">Sandbox / mockup review demo</span>
     <h1>ClipLab Live TikTok Integration Demo</h1>
     <p>
-      This page demonstrates the complete end-to-end TikTok Content Posting API flow used
-      by ClipLab Live. The production workflow uses OAuth, creator review, video upload,
-      publish status polling, and publishing history.
+      This page demonstrates the complete end-to-end TikTok Login Kit and Content Posting
+      API flow used by ClipLab Live. The review build requests only
+      <code>user.info.basic</code> and <code>video.upload</code>.
     </p>
 
     <div class="grid">
       <section>
         <h2>End-to-end flow demonstrated</h2>
         <div class="steps">
-          <div class="step"><strong>1. Connect TikTok with OAuth</strong><p>User clicks Connect TikTok and authorizes ClipLab Live. Requested scopes: <code>user.info.basic</code>, <code>video.upload</code>, and <code>video.publish</code>.</p></div>
-          <div class="step"><strong>2. Select an approved clip</strong><p>The dashboard shows a generated vertical MP4 with captions, source credit, title, hashtags, and status.</p></div>
-          <div class="step"><strong>3. Review caption and visibility</strong><p>The user reviews title, caption, hashtags, and selected TikTok privacy level before upload.</p></div>
-          <div class="step"><strong>4. Upload through Content Posting API</strong><p>ClipLab Live initializes the TikTok upload session, sends video chunks, and receives a publish id.</p></div>
-          <div class="step"><strong>5. Poll publish status</strong><p>The dashboard polls TikTok status until the upload is complete or returns a retryable error.</p></div>
-          <div class="step"><strong>6. Store result and cleanup</strong><p>ClipLab Live stores the publish status and deletes temporary local files after successful publishing.</p></div>
+          <div class="step"><strong>1. Connect TikTok with Login Kit</strong><p>User clicks Connect TikTok and authorizes ClipLab Live. Requested scope: <code>user.info.basic</code>.</p></div>
+          <div class="step"><strong>2. Read basic account info</strong><p>ClipLab Live uses <code>user.info.basic</code> only to show the connected TikTok username and confirm the correct account.</p></div>
+          <div class="step"><strong>3. Select an approved clip</strong><p>The dashboard shows a generated vertical MP4 with captions, source credit, title, hashtags, and upload status.</p></div>
+          <div class="step"><strong>4. Review caption and confirm upload</strong><p>The user reviews title, caption, hashtags, and confirms before TikTok upload starts.</p></div>
+          <div class="step"><strong>5. Upload through Content Posting API</strong><p>ClipLab Live uses <code>video.upload</code> to initialize the upload session and send the video file.</p></div>
+          <div class="step"><strong>6. Store result and cleanup</strong><p>ClipLab Live stores the TikTok upload status and deletes temporary local files after success.</p></div>
         </div>
       </section>
 
@@ -75,19 +75,19 @@
         <div class="mock">
           <div class="screen">
             <div class="row"><span>TikTok account</span><strong>@cliplablive</strong></div>
-            <div class="row"><span>Scopes</span><strong>basic, upload, publish</strong></div>
+            <div class="row"><span>Scopes</span><strong>user.info.basic, video.upload</strong></div>
             <div class="row"><span>Status</span><strong>Authorized</strong></div>
           </div>
           <div class="screen">
             <h2>Approved clip</h2>
             <p>Vertical MP4 · captions burned in · source credit included · hashtags ready.</p>
             <p><code>#streamclips #livestream #gaming #cliplablive</code></p>
-            <span class="button">Publish to TikTok</span>
+            <span class="button">Upload to TikTok</span>
           </div>
           <div class="screen">
+            <div class="row"><span>Login Kit</span><strong>user info shown</strong></div>
             <div class="row"><span>Upload init</span><strong>complete</strong></div>
-            <div class="row"><span>Chunk upload</span><strong>complete</strong></div>
-            <div class="row"><span>Publish status</span><strong>published</strong></div>
+            <div class="row"><span>Upload status</span><strong>complete</strong></div>
           </div>
         </div>
       </section>
