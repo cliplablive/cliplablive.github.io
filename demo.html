@@ -9,7 +9,7 @@
   <link rel="icon" type="image/png" href="./clipbot-icon-32.png" sizes="32x32">
   <link rel="apple-touch-icon" href="./clipbot-icon-192.png">
   <style>
-    :root { color-scheme: dark; --bg:#101114; --panel:#181a20; --line:#2a2d35; --text:#f4f4f5; --muted:#c4c7cf; --accent:#29d8ff; --ok:#35e6a3; }
+    :root { color-scheme: dark; --bg:#101114; --panel:#181a20; --line:#2a2d35; --text:#f4f4f5; --muted:#c4c7cf; --accent:#29d8ff; --ok:#35e6a3; --warn:#ffd36a; }
     * { box-sizing: border-box; }
     body { margin:0; font-family:Arial, Helvetica, sans-serif; background:var(--bg); color:var(--text); line-height:1.55; }
     header, main { width:min(1000px, calc(100% - 32px)); margin:0 auto; }
@@ -23,6 +23,7 @@
     h2 { margin:0 0 12px; font-size:22px; }
     p, li { color:var(--muted); }
     .grid { display:grid; grid-template-columns:1.1fr 0.9fr; gap:18px; margin-top:28px; }
+    .summary { display:grid; grid-template-columns:repeat(3, 1fr); gap:12px; margin-top:24px; }
     section, .panel { border:1px solid var(--line); border-radius:8px; background:var(--panel); padding:18px; }
     .steps { display:grid; gap:12px; }
     .step { border:1px solid var(--line); border-radius:6px; background:#11161c; padding:12px; }
@@ -31,9 +32,11 @@
     .mock { display:grid; gap:10px; }
     .screen { border:1px solid var(--line); border-radius:8px; background:#0b0e12; padding:14px; min-height:110px; }
     .row { display:flex; justify-content:space-between; gap:12px; border-bottom:1px solid var(--line); padding:8px 0; }
+    .row:last-child { border-bottom:0; }
     .button { display:inline-flex; min-height:38px; align-items:center; justify-content:center; border-radius:6px; background:var(--accent); color:#061116; padding:0 14px; font-weight:800; }
+    .pill { display:inline-flex; align-items:center; min-height:30px; border-radius:999px; border:1px solid var(--line); padding:0 10px; color:var(--warn); font-weight:800; }
     code { color:var(--ok); overflow-wrap:anywhere; }
-    @media (max-width: 760px) { header { align-items:flex-start; flex-direction:column; } .grid { grid-template-columns:1fr; } }
+    @media (max-width: 760px) { header { align-items:flex-start; flex-direction:column; } .grid, .summary { grid-template-columns:1fr; } }
   </style>
 </head>
 <body>
@@ -49,13 +52,31 @@
     </nav>
   </header>
   <main>
-    <span class="badge">Sandbox / mockup review demo</span>
+    <span class="badge">Sandbox review demo</span>
     <h1>ClipLab Live TikTok Integration Demo</h1>
     <p>
       This page demonstrates the complete end-to-end TikTok Login Kit and Content Posting
       API flow used by ClipLab Live. The review build requests only
       <code>user.info.basic</code> and <code>video.upload</code>.
     </p>
+
+    <div class="summary" aria-label="Selected TikTok review settings">
+      <div class="panel">
+        <h2>Review environment</h2>
+        <span class="pill">TikTok Sandbox mode</span>
+        <p>The demo video shows the sandbox flow required for app review.</p>
+      </div>
+      <div class="panel">
+        <h2>Products selected</h2>
+        <p><code>Login Kit</code></p>
+        <p><code>Content Posting API</code></p>
+      </div>
+      <div class="panel">
+        <h2>Scopes selected</h2>
+        <p><code>user.info.basic</code></p>
+        <p><code>video.upload</code></p>
+      </div>
+    </div>
 
     <div class="grid">
       <section>
@@ -65,8 +86,8 @@
           <div class="step"><strong>2. Read basic account info</strong><p>ClipLab Live uses <code>user.info.basic</code> only to show the connected TikTok username and confirm the correct account.</p></div>
           <div class="step"><strong>3. Select an approved clip</strong><p>The dashboard shows a generated vertical MP4 with captions, source credit, title, hashtags, and upload status.</p></div>
           <div class="step"><strong>4. Review caption and confirm upload</strong><p>The user reviews title, caption, hashtags, and confirms before TikTok upload starts.</p></div>
-          <div class="step"><strong>5. Upload through Content Posting API</strong><p>ClipLab Live uses <code>video.upload</code> to initialize the upload session and send the video file.</p></div>
-          <div class="step"><strong>6. Store result and cleanup</strong><p>ClipLab Live stores the TikTok upload status and deletes temporary local files after success.</p></div>
+          <div class="step"><strong>5. Upload through Content Posting API sandbox</strong><p>ClipLab Live uses <code>video.upload</code> to initialize the sandbox upload session and send the video file.</p></div>
+          <div class="step"><strong>6. Store result and cleanup</strong><p>ClipLab Live stores the sandbox upload status and deletes temporary local files after success.</p></div>
         </div>
       </section>
 
@@ -74,6 +95,7 @@
         <h2>Dashboard mockup</h2>
         <div class="mock">
           <div class="screen">
+            <div class="row"><span>Environment</span><strong>Sandbox</strong></div>
             <div class="row"><span>TikTok account</span><strong>@cliplablive</strong></div>
             <div class="row"><span>Scopes</span><strong>user.info.basic, video.upload</strong></div>
             <div class="row"><span>Status</span><strong>Authorized</strong></div>
@@ -86,8 +108,8 @@
           </div>
           <div class="screen">
             <div class="row"><span>Login Kit</span><strong>user info shown</strong></div>
-            <div class="row"><span>Upload init</span><strong>complete</strong></div>
-            <div class="row"><span>Upload status</span><strong>complete</strong></div>
+            <div class="row"><span>Sandbox upload init</span><strong>complete</strong></div>
+            <div class="row"><span>Sandbox upload status</span><strong>complete</strong></div>
           </div>
         </div>
       </section>
