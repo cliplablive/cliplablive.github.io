@@ -3,117 +3,344 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>ClipLab Live Demo</title>
-  <meta name="description" content="ClipLab Live TikTok integration demo">
+  <title>ClipLab Live</title>
+  <meta name="description" content="ClipLab Live creator publishing dashboard">
   <link rel="icon" href="./favicon.ico" sizes="any">
   <link rel="icon" type="image/png" href="./clipbot-icon-32.png" sizes="32x32">
-  <link rel="apple-touch-icon" href="./clipbot-icon-192.png">
   <style>
-    :root { color-scheme: dark; --bg:#101114; --panel:#181a20; --line:#2a2d35; --text:#f4f4f5; --muted:#c4c7cf; --accent:#29d8ff; --ok:#35e6a3; --warn:#ffd36a; }
-    * { box-sizing: border-box; }
-    body { margin:0; font-family:Arial, Helvetica, sans-serif; background:var(--bg); color:var(--text); line-height:1.55; }
-    header, main { width:min(1000px, calc(100% - 32px)); margin:0 auto; }
-    header { padding:24px 0; border-bottom:1px solid var(--line); display:flex; justify-content:space-between; gap:18px; align-items:center; }
-    .brand { display:inline-flex; align-items:center; gap:12px; color:var(--text); font-size:22px; font-weight:800; text-decoration:none; }
-    .brand img { width:44px; height:44px; border-radius:50%; display:block; }
-    nav { display:flex; gap:16px; flex-wrap:wrap; }
-    a { color:var(--accent); font-weight:700; text-decoration:none; }
-    main { padding:44px 0 60px; }
-    h1 { margin:0 0 14px; font-size:42px; letter-spacing:0; }
-    h2 { margin:0 0 12px; font-size:22px; }
-    p, li { color:var(--muted); }
-    .grid { display:grid; grid-template-columns:1.1fr 0.9fr; gap:18px; margin-top:28px; }
-    .summary { display:grid; grid-template-columns:repeat(3, 1fr); gap:12px; margin-top:24px; }
-    section, .panel { border:1px solid var(--line); border-radius:8px; background:var(--panel); padding:18px; }
-    .steps { display:grid; gap:12px; }
-    .step { border:1px solid var(--line); border-radius:6px; background:#11161c; padding:12px; }
-    .step strong { color:var(--text); display:block; }
-    .badge { display:inline-block; border:1px solid var(--line); border-radius:999px; padding:3px 8px; color:var(--ok); font-size:12px; font-weight:800; }
-    .mock { display:grid; gap:10px; }
-    .screen { border:1px solid var(--line); border-radius:8px; background:#0b0e12; padding:14px; min-height:110px; }
-    .row { display:flex; justify-content:space-between; gap:12px; border-bottom:1px solid var(--line); padding:8px 0; }
-    .row:last-child { border-bottom:0; }
-    .button { display:inline-flex; min-height:38px; align-items:center; justify-content:center; border-radius:6px; background:var(--accent); color:#061116; padding:0 14px; font-weight:800; }
-    .pill { display:inline-flex; align-items:center; min-height:30px; border-radius:999px; border:1px solid var(--line); padding:0 10px; color:var(--warn); font-weight:800; }
-    code { color:var(--ok); overflow-wrap:anywhere; }
-    @media (max-width: 760px) { header { align-items:flex-start; flex-direction:column; } .grid, .summary { grid-template-columns:1fr; } }
+    :root {
+      color-scheme: dark;
+      --bg:#0e0f12; --surface:#17191e; --surface-2:#1f2229; --line:#30333c;
+      --text:#f5f6f8; --muted:#aeb3bd; --cyan:#25d7ed; --pink:#fe2c55;
+      --green:#3ddc97; --amber:#ffc857; --danger:#ff6b6b;
+    }
+    * { box-sizing:border-box; }
+    html { min-width:320px; }
+    body { margin:0; background:var(--bg); color:var(--text); font:14px/1.45 Inter,Segoe UI,Arial,sans-serif; }
+    button,input,textarea,select { font:inherit; }
+    button { cursor:pointer; }
+    .app { min-height:100vh; display:grid; grid-template-columns:220px minmax(0,1fr); }
+    aside { border-right:1px solid var(--line); padding:20px 14px; background:#121317; position:sticky; top:0; height:100vh; }
+    .brand { display:flex; align-items:center; gap:11px; padding:0 8px 22px; font-size:18px; font-weight:800; }
+    .brand img { width:36px; height:36px; border-radius:50%; }
+    nav { display:grid; gap:4px; }
+    .nav-item { display:flex; align-items:center; gap:11px; min-height:42px; padding:0 12px; color:var(--muted); border-radius:6px; text-decoration:none; font-weight:650; }
+    .nav-item.active { background:var(--surface-2); color:var(--text); }
+    .nav-icon { width:18px; text-align:center; font-size:16px; }
+    .aside-footer { position:absolute; left:14px; right:14px; bottom:18px; border-top:1px solid var(--line); padding-top:16px; color:var(--muted); font-size:12px; }
+    main { min-width:0; }
+    header { height:68px; border-bottom:1px solid var(--line); display:flex; align-items:center; justify-content:space-between; padding:0 28px; background:rgba(14,15,18,.96); position:sticky; top:0; z-index:5; }
+    header h1 { font-size:19px; margin:0; letter-spacing:0; }
+    .environment { display:flex; align-items:center; gap:8px; color:var(--muted); font-size:12px; }
+    .sandbox { color:var(--amber); border:1px solid #625329; padding:4px 8px; border-radius:999px; font-weight:750; }
+    .content { max-width:1280px; margin:0 auto; padding:26px 28px 44px; }
+    .notice { display:flex; align-items:center; justify-content:space-between; gap:16px; padding:12px 14px; border:1px solid #345c63; background:#10262a; border-radius:6px; margin-bottom:20px; }
+    .notice strong { color:var(--cyan); }
+    .workspace { display:grid; grid-template-columns:minmax(270px,360px) minmax(420px,1fr); gap:22px; align-items:start; }
+    .panel { border:1px solid var(--line); background:var(--surface); border-radius:8px; }
+    .panel-head { min-height:54px; display:flex; align-items:center; justify-content:space-between; gap:12px; padding:0 16px; border-bottom:1px solid var(--line); }
+    .panel-head h2 { margin:0; font-size:15px; letter-spacing:0; }
+    .video-wrap { background:#090a0c; padding:16px; display:flex; justify-content:center; }
+    video { display:block; width:min(100%,268px); aspect-ratio:9/16; object-fit:cover; background:#050506; border:1px solid #272a31; }
+    .clip-meta { padding:14px 16px 16px; display:grid; gap:8px; }
+    .meta-row { display:flex; justify-content:space-between; gap:12px; color:var(--muted); }
+    .meta-row strong { color:var(--text); font-weight:650; text-align:right; }
+    .status-dot { display:inline-block; width:8px; height:8px; border-radius:50%; background:var(--green); margin-right:6px; }
+    .form { padding:16px; display:grid; gap:16px; }
+    .account { display:flex; align-items:center; justify-content:space-between; gap:14px; padding:13px; background:#111317; border:1px solid var(--line); border-radius:6px; }
+    .account-main { display:flex; align-items:center; gap:11px; min-width:0; }
+    .avatar { width:38px; height:38px; border-radius:50%; display:grid; place-items:center; color:#061014; background:linear-gradient(135deg,var(--cyan),#fff 48%,var(--pink) 52%); font-weight:900; }
+    .account-copy strong,.account-copy span { display:block; }
+    .account-copy span { color:var(--muted); font-size:12px; }
+    .connected { color:var(--green); font-size:12px; font-weight:750; white-space:nowrap; }
+    .connect-btn { min-height:34px; border:0; border-radius:5px; padding:0 12px; background:#fff; color:#111; font-weight:800; }
+    label { display:grid; gap:7px; color:var(--muted); font-size:12px; font-weight:650; }
+    input,textarea,select { width:100%; border:1px solid var(--line); background:#101216; color:var(--text); border-radius:6px; padding:10px 11px; outline:none; }
+    input:focus,textarea:focus,select:focus { border-color:var(--cyan); }
+    textarea { min-height:96px; resize:vertical; }
+    .counter { text-align:right; margin-top:-4px; color:var(--muted); font-size:11px; }
+    .two-col { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+    .switches { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; }
+    .switch { display:flex; align-items:center; justify-content:space-between; gap:8px; border:1px solid var(--line); border-radius:6px; padding:10px; color:var(--muted); }
+    .switch input { width:16px; height:16px; accent-color:var(--cyan); }
+    .scope-box { display:flex; flex-wrap:wrap; gap:7px; }
+    .scope { border:1px solid var(--line); background:#111317; color:#cdd2db; padding:5px 8px; border-radius:4px; font:11px Consolas,monospace; }
+    .actions { display:flex; align-items:center; justify-content:flex-end; gap:10px; border-top:1px solid var(--line); padding:16px; }
+    .btn { min-height:40px; border:0; border-radius:6px; padding:0 15px; font-weight:750; }
+    .btn.secondary { background:transparent; color:var(--text); border:1px solid var(--line); }
+    .btn.primary { background:var(--pink); color:white; min-width:178px; }
+    .btn:disabled { opacity:.55; cursor:not-allowed; }
+    .progress-panel { margin-top:22px; display:none; }
+    .progress-panel.show { display:block; }
+    .progress-body { padding:16px; }
+    .steps { display:grid; grid-template-columns:repeat(4,1fr); gap:10px; }
+    .step { border:1px solid var(--line); background:#111317; min-height:78px; padding:11px; border-radius:6px; color:var(--muted); }
+    .step strong { display:block; color:var(--text); margin-bottom:5px; font-size:12px; }
+    .step.active { border-color:var(--cyan); box-shadow:inset 3px 0 var(--cyan); }
+    .step.done { border-color:#285f49; box-shadow:inset 3px 0 var(--green); }
+    .step.error { border-color:#6c3434; box-shadow:inset 3px 0 var(--danger); }
+    .bar { height:7px; margin-top:14px; background:#0b0c0f; border-radius:4px; overflow:hidden; }
+    .bar span { display:block; height:100%; width:0; background:linear-gradient(90deg,var(--cyan),var(--pink)); transition:width .45s ease; }
+    .result { display:none; align-items:center; justify-content:space-between; gap:14px; margin-top:14px; padding:12px 13px; border:1px solid #285f49; background:#11261e; border-radius:6px; }
+    .result.show { display:flex; }
+    .result strong { color:var(--green); }
+    .audit { color:var(--muted); font:11px Consolas,monospace; }
+    .review-controls { position:fixed; left:18px; bottom:18px; z-index:10; display:flex; gap:8px; }
+    .review-controls button { min-height:36px; border:1px solid var(--line); border-radius:6px; background:#23262d; color:var(--text); padding:0 12px; font-weight:700; }
+    .modal-backdrop { position:fixed; inset:0; z-index:30; display:none; place-items:center; padding:20px; background:rgba(0,0,0,.72); }
+    .modal-backdrop.show { display:grid; }
+    .auth-modal { width:min(430px,100%); border:1px solid #3b3e47; border-radius:8px; background:#fff; color:#15161a; padding:26px; box-shadow:0 24px 70px rgba(0,0,0,.45); }
+    .auth-brand { display:flex; align-items:center; gap:10px; font-size:18px; font-weight:850; margin-bottom:22px; }
+    .tiktok-mark { width:34px; height:34px; border-radius:50%; display:grid; place-items:center; color:#fff; background:#111; font-weight:900; box-shadow:-3px 0 var(--cyan),3px 0 var(--pink); }
+    .auth-modal h2 { margin:0 0 8px; font-size:21px; }
+    .auth-modal p { color:#5c6068; margin:0 0 18px; }
+    .permission { display:flex; gap:10px; padding:12px 0; border-top:1px solid #e5e6e9; }
+    .permission strong,.permission span { display:block; }
+    .permission span { color:#70747d; font-size:12px; }
+    .auth-actions { display:flex; justify-content:flex-end; gap:9px; margin-top:20px; }
+    .auth-actions button { min-height:39px; border-radius:5px; padding:0 15px; font-weight:800; }
+    .cancel-auth { border:1px solid #d5d7dc; background:#fff; color:#30323a; }
+    .allow-auth { border:0; background:#fe2c55; color:#fff; }
+    @media (max-width:900px) { .app { grid-template-columns:72px minmax(0,1fr); } .brand span,.nav-item span:not(.nav-icon),.aside-footer { display:none; } aside { padding-inline:8px; } .nav-item { justify-content:center; padding:0; } .workspace { grid-template-columns:1fr; } .video-wrap { max-height:580px; } video { height:520px; width:auto; } }
+    @media (max-width:620px) { header { padding:0 16px; } .content { padding:18px 14px 80px; } .two-col,.switches,.steps { grid-template-columns:1fr; } .notice { align-items:flex-start; flex-direction:column; } .actions { align-items:stretch; flex-direction:column-reverse; } .btn { width:100%; } }
   </style>
 </head>
 <body>
-  <header>
-    <a class="brand" href="./index.html" aria-label="ClipLab Live home">
-      <img src="./clipbot-icon.png" alt="ClipLab Live app icon">
-      <span>ClipLab Live</span>
-    </a>
-    <nav aria-label="Site links">
-      <a href="./privacy-policy.html">Privacy Policy</a>
-      <a href="./terms-of-service.html">Terms of Service</a>
-      <a href="./tiktok-callback.html">Redirect URI</a>
-    </nav>
-  </header>
-  <main>
-    <span class="badge">Sandbox review demo</span>
-    <h1>ClipLab Live TikTok Integration Demo</h1>
-    <p>
-      This page demonstrates the complete end-to-end TikTok Login Kit and Content Posting
-      API flow used by ClipLab Live. The review build requests only
-      <code>user.info.basic</code> and <code>video.upload</code>.
-    </p>
+  <div class="app">
+    <aside>
+      <div class="brand"><img src="./clipbot-icon.png" alt="ClipLab Live"><span>ClipLab Live</span></div>
+      <nav aria-label="Application navigation">
+        <a class="nav-item" href="#"><span class="nav-icon">⌂</span><span>Overview</span></a>
+        <a class="nav-item active" href="#"><span class="nav-icon">▶</span><span>Publish</span></a>
+        <a class="nav-item" href="#"><span class="nav-icon">▤</span><span>Clips</span></a>
+        <a class="nav-item" href="#"><span class="nav-icon">↗</span><span>Accounts</span></a>
+        <a class="nav-item" href="#"><span class="nav-icon">⚙</span><span>Settings</span></a>
+      </nav>
+      <div class="aside-footer">ClipLab Live review build<br>Content Posting API</div>
+    </aside>
 
-    <div class="summary" aria-label="Selected TikTok review settings">
-      <div class="panel">
-        <h2>Review environment</h2>
-        <span class="pill">TikTok Sandbox mode</span>
-        <p>The demo video shows the sandbox flow required for app review.</p>
-      </div>
-      <div class="panel">
-        <h2>Products selected</h2>
-        <p><code>Login Kit</code></p>
-        <p><code>Content Posting API</code></p>
-      </div>
-      <div class="panel">
-        <h2>Scopes selected</h2>
-        <p><code>user.info.basic</code></p>
-        <p><code>video.upload</code></p>
-      </div>
-    </div>
+    <main>
+      <header>
+        <h1>Publish to TikTok</h1>
+        <div class="environment"><span>Review environment</span><span class="sandbox">TikTok Sandbox</span></div>
+      </header>
 
-    <div class="grid">
-      <section>
-        <h2>End-to-end flow demonstrated</h2>
-        <div class="steps">
-          <div class="step"><strong>1. Connect TikTok with Login Kit</strong><p>User clicks Connect TikTok and authorizes ClipLab Live. Requested scope: <code>user.info.basic</code>.</p></div>
-          <div class="step"><strong>2. Read basic account info</strong><p>ClipLab Live uses <code>user.info.basic</code> only to show the connected TikTok username and confirm the correct account.</p></div>
-          <div class="step"><strong>3. Select an approved clip</strong><p>The dashboard shows a generated vertical MP4 with captions, source credit, title, hashtags, and upload status.</p></div>
-          <div class="step"><strong>4. Review caption and confirm upload</strong><p>The user reviews title, caption, hashtags, and confirms before TikTok upload starts.</p></div>
-          <div class="step"><strong>5. Upload through Content Posting API sandbox</strong><p>ClipLab Live uses <code>video.upload</code> to initialize the sandbox upload session and send the video file.</p></div>
-          <div class="step"><strong>6. Store result and cleanup</strong><p>ClipLab Live stores the sandbox upload status and deletes temporary local files after success.</p></div>
+      <div class="content">
+        <div class="notice">
+          <div><strong>Sandbox publishing is enabled.</strong> This review flow demonstrates account authorization and video upload without creating a public post.</div>
+          <span class="audit">Build 2.1.0</span>
         </div>
-      </section>
 
-      <section>
-        <h2>Dashboard mockup</h2>
-        <div class="mock">
-          <div class="screen">
-            <div class="row"><span>Environment</span><strong>Sandbox</strong></div>
-            <div class="row"><span>TikTok account</span><strong>@cliplablive</strong></div>
-            <div class="row"><span>Scopes</span><strong>user.info.basic, video.upload</strong></div>
-            <div class="row"><span>Status</span><strong>Authorized</strong></div>
-          </div>
-          <div class="screen">
-            <h2>Approved clip</h2>
-            <p>Vertical MP4 · captions burned in · source credit included · hashtags ready.</p>
-            <p><code>#streamclips #livestream #gaming #cliplablive</code></p>
-            <span class="button">Upload to TikTok</span>
-          </div>
-          <div class="screen">
-            <div class="row"><span>Login Kit</span><strong>user info shown</strong></div>
-            <div class="row"><span>Sandbox upload init</span><strong>complete</strong></div>
-            <div class="row"><span>Sandbox upload status</span><strong>complete</strong></div>
-          </div>
+        <div class="workspace">
+          <section class="panel" aria-label="Selected video">
+            <div class="panel-head"><h2>Selected clip</h2><span><span class="status-dot"></span>Ready</span></div>
+            <div class="video-wrap">
+              <video id="preview" src="./review-clip.mp4" controls playsinline muted preload="metadata"></video>
+            </div>
+            <div class="clip-meta">
+              <div class="meta-row"><span>Format</span><strong>Vertical MP4 · 1080 × 1920</strong></div>
+              <div class="meta-row"><span>Duration</span><strong>00:24</strong></div>
+              <div class="meta-row"><span>Captions</span><strong>Burned in</strong></div>
+              <div class="meta-row"><span>Source credit</span><strong>Included</strong></div>
+            </div>
+          </section>
+
+          <section class="panel" aria-label="TikTok publishing settings">
+            <div class="panel-head"><h2>Post settings</h2><span class="audit">Draft saved</span></div>
+            <div class="form">
+              <div class="account">
+                <div class="account-main">
+                  <div class="avatar">T</div>
+                  <div class="account-copy"><strong id="accountName">TikTok not connected</strong><span id="accountDetail">Connect a Sandbox test account</span></div>
+                </div>
+                <button class="connect-btn" id="connectTikTok">Connect TikTok</button>
+              </div>
+
+              <label>Caption
+                <textarea id="caption" maxlength="2200">That ending was completely unexpected.
+
+Credit: original streamer
+#gaming #streamclips #livestream #cliplablive</textarea>
+                <span class="counter"><span id="captionCount">0</span> / 2200</span>
+              </label>
+
+              <div class="two-col">
+                <label>Visibility
+                  <select id="privacy">
+                    <option value="SELF_ONLY" selected>Only me (Sandbox test)</option>
+                    <option value="MUTUAL_FOLLOW_FRIENDS">Friends</option>
+                    <option value="PUBLIC_TO_EVERYONE">Public</option>
+                  </select>
+                </label>
+                <label>Content disclosure
+                  <select><option>Not branded content</option><option>Branded content</option></select>
+                </label>
+              </div>
+
+              <div class="switches" aria-label="TikTok interaction settings">
+                <label class="switch">Comments <input type="checkbox" checked></label>
+                <label class="switch">Duet <input type="checkbox" checked></label>
+                <label class="switch">Stitch <input type="checkbox" checked></label>
+              </div>
+
+              <label>Authorized TikTok capabilities</label>
+              <div class="scope-box">
+                <span class="scope">Login Kit</span>
+                <span class="scope">user.info.basic</span>
+                <span class="scope">Content Posting API</span>
+                <span class="scope">video.upload</span>
+              </div>
+            </div>
+            <div class="actions">
+              <button class="btn secondary" id="changeClip">Choose another clip</button>
+              <button class="btn primary" id="publish" disabled>Upload to TikTok Sandbox</button>
+            </div>
+          </section>
         </div>
-      </section>
+
+        <section class="panel progress-panel" id="progressPanel" aria-live="polite">
+          <div class="panel-head"><h2>Upload activity</h2><span id="activityState" class="audit">Waiting</span></div>
+          <div class="progress-body">
+            <div class="steps">
+              <div class="step" data-step="0"><strong>1. Verify account</strong><span>Read basic profile</span></div>
+              <div class="step" data-step="1"><strong>2. Initialize upload</strong><span>Create sandbox session</span></div>
+              <div class="step" data-step="2"><strong>3. Transfer video</strong><span>Upload vertical MP4</span></div>
+              <div class="step" data-step="3"><strong>4. Confirm status</strong><span>Check processing result</span></div>
+            </div>
+            <div class="bar"><span id="progressBar"></span></div>
+            <div class="result" id="result">
+              <div><strong>Sandbox upload complete</strong><br><span>The video was accepted for processing. No public post was created.</span></div>
+              <span class="audit">publish_id: sandbox_demo_2841</span>
+            </div>
+          </div>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <div class="review-controls">
+    <button id="resetDemo">Reset demo</button>
+    <button id="autoDemo">Run reviewer demo</button>
+  </div>
+
+  <div class="modal-backdrop" id="authModal" role="dialog" aria-modal="true" aria-labelledby="authTitle">
+    <div class="auth-modal">
+      <div class="auth-brand"><span class="tiktok-mark">♪</span><span>TikTok Sandbox</span></div>
+      <h2 id="authTitle">Authorize ClipLab Live</h2>
+      <p>ClipLab Live is requesting access to your TikTok Sandbox test account.</p>
+      <div class="permission"><span>✓</span><div><strong>View basic profile</strong><span>Used to display and verify the connected account · user.info.basic</span></div></div>
+      <div class="permission"><span>✓</span><div><strong>Upload videos</strong><span>Used only after you confirm a clip · video.upload</span></div></div>
+      <div class="auth-actions"><button class="cancel-auth" id="cancelAuth">Cancel</button><button class="allow-auth" id="allowAuth">Continue as @cliplablive</button></div>
     </div>
-  </main>
+  </div>
+
+  <script>
+    const caption = document.getElementById('caption');
+    const captionCount = document.getElementById('captionCount');
+    const publish = document.getElementById('publish');
+    const progressPanel = document.getElementById('progressPanel');
+    const progressBar = document.getElementById('progressBar');
+    const activityState = document.getElementById('activityState');
+    const result = document.getElementById('result');
+    const preview = document.getElementById('preview');
+    const steps = [...document.querySelectorAll('.step')];
+    let running = false;
+    let connected = false;
+
+    function updateCount() { captionCount.textContent = caption.value.length; }
+    function wait(ms) { return new Promise(resolve => setTimeout(resolve, ms)); }
+    function setStep(index, state, label) {
+      steps[index].className = `step ${state}`;
+      if (label) steps[index].querySelector('span').textContent = label;
+    }
+    function resetDemo() {
+      running = false;
+      connected = false;
+      publish.disabled = true;
+      publish.textContent = 'Upload to TikTok Sandbox';
+      document.getElementById('accountName').textContent = 'TikTok not connected';
+      document.getElementById('accountDetail').textContent = 'Connect a Sandbox test account';
+      const connectButton = document.getElementById('connectTikTok');
+      connectButton.hidden = false;
+      connectButton.textContent = 'Connect TikTok';
+      document.getElementById('authModal').classList.remove('show');
+      progressPanel.classList.remove('show');
+      result.classList.remove('show');
+      progressBar.style.width = '0%';
+      activityState.textContent = 'Waiting';
+      steps.forEach((step, index) => {
+        step.className = 'step';
+        step.querySelector('span').textContent = ['Read basic profile','Create sandbox session','Upload vertical MP4','Check processing result'][index];
+      });
+    }
+    async function runUpload() {
+      if (running || !connected) return;
+      running = true;
+      publish.disabled = true;
+      publish.textContent = 'Uploading…';
+      progressPanel.classList.add('show');
+      progressPanel.scrollIntoView({behavior:'smooth', block:'center'});
+      const sequence = [
+        ['Authorizing with Login Kit', 0, 18, 'Reading @cliplablive with user.info.basic'],
+        ['Account verified', 0, 28, 'Connected account verified'],
+        ['Initializing Content Posting API', 1, 43, 'Sandbox upload session created'],
+        ['Uploading video.upload payload', 2, 68, 'Transferring review-clip.mp4'],
+        ['Uploading video.upload payload', 2, 88, 'Upload 100% complete'],
+        ['Checking processing status', 3, 96, 'TikTok is processing the video'],
+        ['Sandbox upload complete', 3, 100, 'PUBLISH_COMPLETE']
+      ];
+      for (let i = 0; i < sequence.length; i++) {
+        const [label, stepIndex, percent, detail] = sequence[i];
+        activityState.textContent = label;
+        steps.forEach((step, index) => {
+          if (index < stepIndex) step.className = 'step done';
+        });
+        setStep(stepIndex, i === sequence.length - 1 ? 'done' : 'active', detail);
+        progressBar.style.width = `${percent}%`;
+        await wait(i === 0 ? 1100 : 1250);
+      }
+      steps.forEach(step => step.className = 'step done');
+      result.classList.add('show');
+      publish.textContent = 'Uploaded to Sandbox';
+      running = false;
+    }
+    async function runReviewerDemo() {
+      resetDemo();
+      window.scrollTo({top:0, behavior:'smooth'});
+      await wait(700);
+      openAuth();
+      await wait(1600);
+      completeAuth();
+      await wait(1200);
+      preview.muted = true;
+      preview.play().catch(() => {});
+      await wait(1800);
+      caption.focus();
+      caption.setSelectionRange(0, caption.value.length);
+      await wait(900);
+      caption.setSelectionRange(caption.value.length, caption.value.length);
+      document.getElementById('privacy').focus();
+      await wait(900);
+      await runUpload();
+    }
+    function openAuth() { document.getElementById('authModal').classList.add('show'); }
+    function completeAuth() {
+      connected = true;
+      document.getElementById('authModal').classList.remove('show');
+      document.getElementById('accountName').textContent = '@cliplablive';
+      document.getElementById('accountDetail').textContent = 'TikTok Sandbox creator account';
+      document.getElementById('connectTikTok').hidden = true;
+      publish.disabled = false;
+    }
+    caption.addEventListener('input', updateCount);
+    publish.addEventListener('click', runUpload);
+    document.getElementById('connectTikTok').addEventListener('click', openAuth);
+    document.getElementById('cancelAuth').addEventListener('click', () => document.getElementById('authModal').classList.remove('show'));
+    document.getElementById('allowAuth').addEventListener('click', completeAuth);
+    document.getElementById('resetDemo').addEventListener('click', resetDemo);
+    document.getElementById('autoDemo').addEventListener('click', runReviewerDemo);
+    document.getElementById('changeClip').addEventListener('click', () => alert('Clip library opened. The selected clip remains unchanged in this review demo.'));
+    updateCount();
+  </script>
 </body>
 </html>
