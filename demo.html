@@ -122,12 +122,12 @@
     <main>
       <header>
         <h1>Publish to TikTok</h1>
-        <div class="environment"><span>Review environment</span><span class="sandbox">TikTok Sandbox</span></div>
+        <div class="environment"><span>Review environment</span><span class="sandbox">TikTok Sandbox Direct Post</span></div>
       </header>
 
       <div class="content">
         <div class="notice">
-          <div><strong>Sandbox publishing is enabled.</strong> This review flow demonstrates account authorization and video upload without creating a public post.</div>
+          <div><strong>Sandbox Direct Post is enabled.</strong> This review flow demonstrates authorization, creator settings, confirmation, upload, and direct publishing.</div>
           <span class="audit">Build 2.1.0</span>
         </div>
 
@@ -188,28 +188,29 @@ Credit: original streamer
                 <span class="scope">Login Kit</span>
                 <span class="scope">user.info.basic</span>
                 <span class="scope">Content Posting API</span>
+                <span class="scope">video.publish</span>
                 <span class="scope">video.upload</span>
               </div>
             </div>
             <div class="actions">
               <button class="btn secondary" id="changeClip">Choose another clip</button>
-              <button class="btn primary" id="publish" disabled>Upload to TikTok Sandbox</button>
+              <button class="btn primary" id="publish" disabled>Publish directly to TikTok Sandbox</button>
             </div>
           </section>
         </div>
 
         <section class="panel progress-panel" id="progressPanel" aria-live="polite">
-          <div class="panel-head"><h2>Upload activity</h2><span id="activityState" class="audit">Waiting</span></div>
+          <div class="panel-head"><h2>Direct Post activity</h2><span id="activityState" class="audit">Waiting</span></div>
           <div class="progress-body">
             <div class="steps">
               <div class="step" data-step="0"><strong>1. Verify account</strong><span>Read basic profile</span></div>
-              <div class="step" data-step="1"><strong>2. Initialize upload</strong><span>Create sandbox session</span></div>
+              <div class="step" data-step="1"><strong>2. Initialize Direct Post</strong><span>Create sandbox publish session</span></div>
               <div class="step" data-step="2"><strong>3. Transfer video</strong><span>Upload vertical MP4</span></div>
               <div class="step" data-step="3"><strong>4. Confirm status</strong><span>Check processing result</span></div>
             </div>
             <div class="bar"><span id="progressBar"></span></div>
             <div class="result" id="result">
-              <div><strong>Sandbox upload complete</strong><br><span>The video was accepted for processing. No public post was created.</span></div>
+              <div><strong>Sandbox Direct Post complete</strong><br><span>The video was published with Only me visibility in the TikTok Sandbox account.</span></div>
               <span class="audit">publish_id: sandbox_demo_2841</span>
             </div>
           </div>
@@ -229,7 +230,8 @@ Credit: original streamer
       <h2 id="authTitle">Authorize ClipLab Live</h2>
       <p>ClipLab Live is requesting access to your TikTok Sandbox test account.</p>
       <div class="permission"><span>✓</span><div><strong>View basic profile</strong><span>Used to display and verify the connected account · user.info.basic</span></div></div>
-      <div class="permission"><span>✓</span><div><strong>Upload videos</strong><span>Used only after you confirm a clip · video.upload</span></div></div>
+      <div class="permission"><span>✓</span><div><strong>Publish videos</strong><span>Used only after you confirm a clip · video.publish</span></div></div>
+      <div class="permission"><span>✓</span><div><strong>Upload video drafts</strong><span>Optional creator handoff · video.upload</span></div></div>
       <div class="auth-actions"><button class="cancel-auth" id="cancelAuth">Cancel</button><button class="allow-auth" id="allowAuth">Continue as @cliplablive</button></div>
     </div>
   </div>
@@ -257,7 +259,7 @@ Credit: original streamer
       running = false;
       connected = false;
       publish.disabled = true;
-      publish.textContent = 'Upload to TikTok Sandbox';
+      publish.textContent = 'Publish directly to TikTok Sandbox';
       document.getElementById('accountName').textContent = 'TikTok not connected';
       document.getElementById('accountDetail').textContent = 'Connect a Sandbox test account';
       const connectButton = document.getElementById('connectTikTok');
@@ -270,7 +272,7 @@ Credit: original streamer
       activityState.textContent = 'Waiting';
       steps.forEach((step, index) => {
         step.className = 'step';
-        step.querySelector('span').textContent = ['Read basic profile','Create sandbox session','Upload vertical MP4','Check processing result'][index];
+        step.querySelector('span').textContent = ['Read basic profile','Create Direct Post session','Upload vertical MP4','Check publish result'][index];
       });
     }
     async function runUpload() {
@@ -283,11 +285,11 @@ Credit: original streamer
       const sequence = [
         ['Authorizing with Login Kit', 0, 18, 'Reading @cliplablive with user.info.basic'],
         ['Account verified', 0, 28, 'Connected account verified'],
-        ['Initializing Content Posting API', 1, 43, 'Sandbox upload session created'],
-        ['Uploading video.upload payload', 2, 68, 'Transferring review-clip.mp4'],
-        ['Uploading video.upload payload', 2, 88, 'Upload 100% complete'],
+        ['Initializing Direct Post API', 1, 43, 'Sandbox publish session created'],
+        ['Uploading video.publish payload', 2, 68, 'Transferring review-clip.mp4'],
+        ['Uploading video.publish payload', 2, 88, 'Upload 100% complete'],
         ['Checking processing status', 3, 96, 'TikTok is processing the video'],
-        ['Sandbox upload complete', 3, 100, 'PUBLISH_COMPLETE']
+        ['Sandbox Direct Post complete', 3, 100, 'PUBLISH_COMPLETE']
       ];
       for (let i = 0; i < sequence.length; i++) {
         const [label, stepIndex, percent, detail] = sequence[i];
@@ -301,7 +303,7 @@ Credit: original streamer
       }
       steps.forEach(step => step.className = 'step done');
       result.classList.add('show');
-      publish.textContent = 'Uploaded to Sandbox';
+      publish.textContent = 'Published to Sandbox';
       running = false;
     }
     async function runReviewerDemo() {
