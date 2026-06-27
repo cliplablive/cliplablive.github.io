@@ -10,99 +10,519 @@
   <style>
     :root {
       color-scheme: dark;
-      --bg:#0e0f12; --surface:#17191e; --surface-2:#1f2229; --line:#30333c;
-      --text:#f5f6f8; --muted:#aeb3bd; --cyan:#25d7ed; --pink:#fe2c55;
-      --green:#3ddc97; --amber:#ffc857; --danger:#ff6b6b;
+      --bg: #0e0f12;
+      --surface: #17191e;
+      --surface-2: #1f2229;
+      --line: #30333c;
+      --text: #f5f6f8;
+      --muted: #aeb3bd;
+      --cyan: #25d7ed;
+      --pink: #fe2c55;
+      --green: #3ddc97;
+      --amber: #ffc857;
+      --danger: #ff6b6b;
     }
-    * { box-sizing:border-box; }
-    html { min-width:320px; }
-    body { margin:0; background:var(--bg); color:var(--text); font:14px/1.45 Inter,Segoe UI,Arial,sans-serif; }
-    button,input,textarea,select { font:inherit; }
-    button { cursor:pointer; }
-    .app { min-height:100vh; display:grid; grid-template-columns:220px minmax(0,1fr); }
-    aside { border-right:1px solid var(--line); padding:20px 14px; background:#121317; position:sticky; top:0; height:100vh; }
-    .brand { display:flex; align-items:center; gap:11px; padding:0 8px 22px; font-size:18px; font-weight:800; }
-    .brand img { width:36px; height:36px; border-radius:50%; }
-    nav { display:grid; gap:4px; }
-    .nav-item { display:flex; align-items:center; gap:11px; min-height:42px; padding:0 12px; color:var(--muted); border-radius:6px; text-decoration:none; font-weight:650; }
-    .nav-item.active { background:var(--surface-2); color:var(--text); }
-    .nav-icon { width:18px; text-align:center; font-size:16px; }
-    .aside-footer { position:absolute; left:14px; right:14px; bottom:18px; border-top:1px solid var(--line); padding-top:16px; color:var(--muted); font-size:12px; }
-    main { min-width:0; }
-    header { height:68px; border-bottom:1px solid var(--line); display:flex; align-items:center; justify-content:space-between; padding:0 28px; background:rgba(14,15,18,.96); position:sticky; top:0; z-index:5; }
-    header h1 { font-size:19px; margin:0; letter-spacing:0; }
-    .environment { display:flex; align-items:center; gap:8px; color:var(--muted); font-size:12px; }
-    .sandbox { color:var(--amber); border:1px solid #625329; padding:4px 8px; border-radius:999px; font-weight:750; }
-    .content { max-width:1280px; margin:0 auto; padding:26px 28px 44px; }
-    .notice { display:flex; align-items:center; justify-content:space-between; gap:16px; padding:12px 14px; border:1px solid #345c63; background:#10262a; border-radius:6px; margin-bottom:20px; }
-    .notice strong { color:var(--cyan); }
-    .workspace { display:grid; grid-template-columns:minmax(270px,360px) minmax(420px,1fr); gap:22px; align-items:start; }
-    .panel { border:1px solid var(--line); background:var(--surface); border-radius:8px; }
-    .panel-head { min-height:54px; display:flex; align-items:center; justify-content:space-between; gap:12px; padding:0 16px; border-bottom:1px solid var(--line); }
-    .panel-head h2 { margin:0; font-size:15px; letter-spacing:0; }
-    .video-wrap { background:#090a0c; padding:16px; display:flex; justify-content:center; }
-    video { display:block; width:min(100%,268px); aspect-ratio:9/16; object-fit:cover; background:#050506; border:1px solid #272a31; }
-    .clip-meta { padding:14px 16px 16px; display:grid; gap:8px; }
-    .meta-row { display:flex; justify-content:space-between; gap:12px; color:var(--muted); }
-    .meta-row strong { color:var(--text); font-weight:650; text-align:right; }
-    .status-dot { display:inline-block; width:8px; height:8px; border-radius:50%; background:var(--green); margin-right:6px; }
-    .form { padding:16px; display:grid; gap:16px; }
-    .account { display:flex; align-items:center; justify-content:space-between; gap:14px; padding:13px; background:#111317; border:1px solid var(--line); border-radius:6px; }
-    .account-main { display:flex; align-items:center; gap:11px; min-width:0; }
-    .avatar { width:38px; height:38px; border-radius:50%; display:grid; place-items:center; color:#061014; background:linear-gradient(135deg,var(--cyan),#fff 48%,var(--pink) 52%); font-weight:900; }
-    .account-copy strong,.account-copy span { display:block; }
-    .account-copy span { color:var(--muted); font-size:12px; }
-    .connected { color:var(--green); font-size:12px; font-weight:750; white-space:nowrap; }
-    .connect-btn { min-height:34px; border:0; border-radius:5px; padding:0 12px; background:#fff; color:#111; font-weight:800; }
-    label { display:grid; gap:7px; color:var(--muted); font-size:12px; font-weight:650; }
-    input,textarea,select { width:100%; border:1px solid var(--line); background:#101216; color:var(--text); border-radius:6px; padding:10px 11px; outline:none; }
-    input:focus,textarea:focus,select:focus { border-color:var(--cyan); }
-    textarea { min-height:96px; resize:vertical; }
-    .counter { text-align:right; margin-top:-4px; color:var(--muted); font-size:11px; }
-    .two-col { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
-    .switches { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; }
-    .switch { display:flex; align-items:center; justify-content:space-between; gap:8px; border:1px solid var(--line); border-radius:6px; padding:10px; color:var(--muted); }
-    .switch input { width:16px; height:16px; accent-color:var(--cyan); }
-    .scope-box { display:flex; flex-wrap:wrap; gap:7px; }
-    .scope { border:1px solid var(--line); background:#111317; color:#cdd2db; padding:5px 8px; border-radius:4px; font:11px Consolas,monospace; }
-    .actions { display:flex; align-items:center; justify-content:flex-end; gap:10px; border-top:1px solid var(--line); padding:16px; }
-    .btn { min-height:40px; border:0; border-radius:6px; padding:0 15px; font-weight:750; }
-    .btn.secondary { background:transparent; color:var(--text); border:1px solid var(--line); }
-    .btn.primary { background:var(--pink); color:white; min-width:178px; }
-    .btn:disabled { opacity:.55; cursor:not-allowed; }
-    .progress-panel { margin-top:22px; display:none; }
-    .progress-panel.show { display:block; }
-    .progress-body { padding:16px; }
-    .steps { display:grid; grid-template-columns:repeat(4,1fr); gap:10px; }
-    .step { border:1px solid var(--line); background:#111317; min-height:78px; padding:11px; border-radius:6px; color:var(--muted); }
-    .step strong { display:block; color:var(--text); margin-bottom:5px; font-size:12px; }
-    .step.active { border-color:var(--cyan); box-shadow:inset 3px 0 var(--cyan); }
-    .step.done { border-color:#285f49; box-shadow:inset 3px 0 var(--green); }
-    .step.error { border-color:#6c3434; box-shadow:inset 3px 0 var(--danger); }
-    .bar { height:7px; margin-top:14px; background:#0b0c0f; border-radius:4px; overflow:hidden; }
-    .bar span { display:block; height:100%; width:0; background:linear-gradient(90deg,var(--cyan),var(--pink)); transition:width .45s ease; }
-    .result { display:none; align-items:center; justify-content:space-between; gap:14px; margin-top:14px; padding:12px 13px; border:1px solid #285f49; background:#11261e; border-radius:6px; }
-    .result.show { display:flex; }
-    .result strong { color:var(--green); }
-    .audit { color:var(--muted); font:11px Consolas,monospace; }
-    .review-controls { position:fixed; left:18px; bottom:18px; z-index:10; display:flex; gap:8px; }
-    .review-controls button { min-height:36px; border:1px solid var(--line); border-radius:6px; background:#23262d; color:var(--text); padding:0 12px; font-weight:700; }
-    .modal-backdrop { position:fixed; inset:0; z-index:30; display:none; place-items:center; padding:20px; background:rgba(0,0,0,.72); }
-    .modal-backdrop.show { display:grid; }
-    .auth-modal { width:min(430px,100%); border:1px solid #3b3e47; border-radius:8px; background:#fff; color:#15161a; padding:26px; box-shadow:0 24px 70px rgba(0,0,0,.45); }
-    .auth-brand { display:flex; align-items:center; gap:10px; font-size:18px; font-weight:850; margin-bottom:22px; }
-    .tiktok-mark { width:34px; height:34px; border-radius:50%; display:grid; place-items:center; color:#fff; background:#111; font-weight:900; box-shadow:-3px 0 var(--cyan),3px 0 var(--pink); }
-    .auth-modal h2 { margin:0 0 8px; font-size:21px; }
-    .auth-modal p { color:#5c6068; margin:0 0 18px; }
-    .permission { display:flex; gap:10px; padding:12px 0; border-top:1px solid #e5e6e9; }
-    .permission strong,.permission span { display:block; }
-    .permission span { color:#70747d; font-size:12px; }
-    .auth-actions { display:flex; justify-content:flex-end; gap:9px; margin-top:20px; }
-    .auth-actions button { min-height:39px; border-radius:5px; padding:0 15px; font-weight:800; }
-    .cancel-auth { border:1px solid #d5d7dc; background:#fff; color:#30323a; }
-    .allow-auth { border:0; background:#fe2c55; color:#fff; }
-    @media (max-width:900px) { .app { grid-template-columns:72px minmax(0,1fr); } .brand span,.nav-item span:not(.nav-icon),.aside-footer { display:none; } aside { padding-inline:8px; } .nav-item { justify-content:center; padding:0; } .workspace { grid-template-columns:1fr; } .video-wrap { max-height:580px; } video { height:520px; width:auto; } }
-    @media (max-width:620px) { header { padding:0 16px; } .content { padding:18px 14px 80px; } .two-col,.switches,.steps { grid-template-columns:1fr; } .notice { align-items:flex-start; flex-direction:column; } .actions { align-items:stretch; flex-direction:column-reverse; } .btn { width:100%; } }
+    * { box-sizing: border-box; }
+    html { min-width: 320px; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font: 14px/1.45 Arial, Helvetica, sans-serif;
+    }
+    button, input, textarea, select { font: inherit; }
+    button { cursor: pointer; }
+    .app {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 220px minmax(0, 1fr);
+    }
+    aside {
+      border-right: 1px solid var(--line);
+      padding: 20px 14px;
+      background: #121317;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      padding: 0 8px 22px;
+      font-size: 18px;
+      font-weight: 800;
+    }
+    .brand img { width: 36px; height: 36px; border-radius: 50%; }
+    nav { display: grid; gap: 4px; }
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      min-height: 42px;
+      padding: 0 12px;
+      color: var(--muted);
+      border-radius: 6px;
+      text-decoration: none;
+      font-weight: 650;
+    }
+    .nav-item.active { background: var(--surface-2); color: var(--text); }
+    .nav-icon {
+      width: 18px;
+      text-align: center;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0;
+    }
+    .aside-footer {
+      position: absolute;
+      left: 14px;
+      right: 14px;
+      bottom: 18px;
+      border-top: 1px solid var(--line);
+      padding-top: 16px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+    main { min-width: 0; }
+    header {
+      height: 68px;
+      border-bottom: 1px solid var(--line);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 0 28px;
+      background: rgba(14, 15, 18, 0.96);
+      position: sticky;
+      top: 0;
+      z-index: 5;
+    }
+    header h1 {
+      font-size: 19px;
+      margin: 0;
+      letter-spacing: 0;
+    }
+    .environment {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+    .sandbox {
+      color: var(--amber);
+      border: 1px solid #625329;
+      padding: 4px 8px;
+      border-radius: 999px;
+      font-weight: 750;
+    }
+    .content {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 26px 28px 44px;
+    }
+    .notice {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 12px 14px;
+      border: 1px solid #345c63;
+      background: #10262a;
+      border-radius: 6px;
+      margin-bottom: 20px;
+    }
+    .notice strong { color: var(--cyan); }
+    .workspace {
+      display: grid;
+      grid-template-columns: minmax(270px, 360px) minmax(420px, 1fr);
+      gap: 22px;
+      align-items: start;
+    }
+    .panel {
+      border: 1px solid var(--line);
+      background: var(--surface);
+      border-radius: 8px;
+    }
+    .panel-head {
+      min-height: 54px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 0 16px;
+      border-bottom: 1px solid var(--line);
+    }
+    .panel-head h2 {
+      margin: 0;
+      font-size: 15px;
+      letter-spacing: 0;
+    }
+    .video-wrap {
+      background: #090a0c;
+      padding: 16px;
+      display: flex;
+      justify-content: center;
+    }
+    video {
+      display: block;
+      width: min(100%, 268px);
+      aspect-ratio: 9 / 16;
+      object-fit: cover;
+      background: #050506;
+      border: 1px solid #272a31;
+    }
+    .clip-meta {
+      padding: 14px 16px 16px;
+      display: grid;
+      gap: 8px;
+    }
+    .meta-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      color: var(--muted);
+    }
+    .meta-row strong {
+      color: var(--text);
+      font-weight: 650;
+      text-align: right;
+    }
+    .status-dot {
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--green);
+      margin-right: 6px;
+    }
+    .form {
+      padding: 16px;
+      display: grid;
+      gap: 16px;
+    }
+    .account {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      padding: 13px;
+      background: #111317;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+    }
+    .account-main {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      min-width: 0;
+    }
+    .avatar {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      color: #061014;
+      background: linear-gradient(135deg, var(--cyan), #fff 48%, var(--pink) 52%);
+      font-weight: 900;
+    }
+    .account-copy strong,
+    .account-copy span { display: block; }
+    .account-copy span { color: var(--muted); font-size: 12px; }
+    .connected {
+      color: var(--green);
+      font-size: 12px;
+      font-weight: 750;
+      white-space: nowrap;
+    }
+    .connect-btn {
+      min-height: 34px;
+      border: 0;
+      border-radius: 5px;
+      padding: 0 12px;
+      background: #fff;
+      color: #111;
+      font-weight: 800;
+    }
+    label {
+      display: grid;
+      gap: 7px;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 650;
+    }
+    input, textarea, select {
+      width: 100%;
+      border: 1px solid var(--line);
+      background: #101216;
+      color: var(--text);
+      border-radius: 6px;
+      padding: 10px 11px;
+      outline: none;
+    }
+    input:focus, textarea:focus, select:focus { border-color: var(--cyan); }
+    textarea {
+      min-height: 96px;
+      resize: vertical;
+    }
+    .counter {
+      text-align: right;
+      margin-top: -4px;
+      color: var(--muted);
+      font-size: 11px;
+    }
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    .switches {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+    }
+    .switch {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      padding: 10px;
+      color: var(--muted);
+    }
+    .switch input {
+      width: 16px;
+      height: 16px;
+      accent-color: var(--cyan);
+    }
+    .scope-box {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+    }
+    .scope {
+      border: 1px solid var(--line);
+      background: #111317;
+      color: #cdd2db;
+      padding: 5px 8px;
+      border-radius: 4px;
+      font: 11px Consolas, monospace;
+    }
+    .actions {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 10px;
+      border-top: 1px solid var(--line);
+      padding: 16px;
+    }
+    .btn {
+      min-height: 40px;
+      border: 0;
+      border-radius: 6px;
+      padding: 0 15px;
+      font-weight: 750;
+    }
+    .btn.secondary {
+      background: transparent;
+      color: var(--text);
+      border: 1px solid var(--line);
+    }
+    .btn.primary {
+      background: var(--pink);
+      color: white;
+      min-width: 178px;
+    }
+    .btn:disabled { opacity: .55; cursor: not-allowed; }
+    .progress-panel {
+      margin-top: 22px;
+      display: none;
+    }
+    .progress-panel.show { display: block; }
+    .progress-body { padding: 16px; }
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+    }
+    .step {
+      border: 1px solid var(--line);
+      background: #111317;
+      min-height: 78px;
+      padding: 11px;
+      border-radius: 6px;
+      color: var(--muted);
+    }
+    .step strong {
+      display: block;
+      color: var(--text);
+      margin-bottom: 5px;
+      font-size: 12px;
+    }
+    .step.active {
+      border-color: var(--cyan);
+      box-shadow: inset 3px 0 var(--cyan);
+    }
+    .step.done {
+      border-color: #285f49;
+      box-shadow: inset 3px 0 var(--green);
+    }
+    .step.error {
+      border-color: #6c3434;
+      box-shadow: inset 3px 0 var(--danger);
+    }
+    .bar {
+      height: 7px;
+      margin-top: 14px;
+      background: #0b0c0f;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    .bar span {
+      display: block;
+      height: 100%;
+      width: 0;
+      background: linear-gradient(90deg, var(--cyan), var(--pink));
+      transition: width .45s ease;
+    }
+    .result {
+      display: none;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      margin-top: 14px;
+      padding: 12px 13px;
+      border: 1px solid #285f49;
+      background: #11261e;
+      border-radius: 6px;
+    }
+    .result.show { display: flex; }
+    .result strong { color: var(--green); }
+    .audit { color: var(--muted); font: 11px Consolas, monospace; }
+    .review-controls {
+      position: fixed;
+      left: 18px;
+      bottom: 18px;
+      z-index: 10;
+      display: flex;
+      gap: 8px;
+    }
+    .review-controls button {
+      min-height: 36px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: #23262d;
+      color: var(--text);
+      padding: 0 12px;
+      font-weight: 700;
+    }
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      z-index: 30;
+      display: none;
+      place-items: center;
+      padding: 20px;
+      background: rgba(0, 0, 0, .72);
+    }
+    .modal-backdrop.show { display: grid; }
+    .auth-modal {
+      width: min(430px, 100%);
+      border: 1px solid #3b3e47;
+      border-radius: 8px;
+      background: #fff;
+      color: #15161a;
+      padding: 26px;
+      box-shadow: 0 24px 70px rgba(0, 0, 0, .45);
+    }
+    .auth-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 18px;
+      font-weight: 850;
+      margin-bottom: 22px;
+    }
+    .tiktok-mark {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      color: #fff;
+      background: #111;
+      font-weight: 900;
+      box-shadow: -3px 0 var(--cyan), 3px 0 var(--pink);
+    }
+    .auth-modal h2 {
+      margin: 0 0 8px;
+      font-size: 21px;
+    }
+    .auth-modal p {
+      color: #5c6068;
+      margin: 0 0 18px;
+    }
+    .permission {
+      display: flex;
+      gap: 10px;
+      padding: 12px 0;
+      border-top: 1px solid #e5e6e9;
+    }
+    .permission strong,
+    .permission span { display: block; }
+    .permission span { color: #70747d; font-size: 12px; }
+    .auth-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 9px;
+      margin-top: 20px;
+    }
+    .auth-actions button {
+      min-height: 39px;
+      border-radius: 5px;
+      padding: 0 15px;
+      font-weight: 800;
+    }
+    .cancel-auth {
+      border: 1px solid #d5d7dc;
+      background: #fff;
+      color: #30323a;
+    }
+    .allow-auth {
+      border: 0;
+      background: #fe2c55;
+      color: #fff;
+    }
+    @media (max-width: 900px) {
+      .app { grid-template-columns: 72px minmax(0, 1fr); }
+      .brand span,
+      .nav-item span:not(.nav-icon),
+      .aside-footer { display: none; }
+      aside { padding-inline: 8px; }
+      .nav-item { justify-content: center; padding: 0; }
+      .workspace { grid-template-columns: 1fr; }
+      .video-wrap { max-height: 580px; }
+      video { height: 520px; width: auto; }
+    }
+    @media (max-width: 620px) {
+      header { padding: 0 16px; }
+      .content { padding: 18px 14px 80px; }
+      .two-col,
+      .switches,
+      .steps { grid-template-columns: 1fr; }
+      .notice {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+      .actions {
+        align-items: stretch;
+        flex-direction: column-reverse;
+      }
+      .btn { width: 100%; }
+    }
   </style>
 </head>
 <body>
@@ -110,11 +530,11 @@
     <aside>
       <div class="brand"><img src="./clipbot-icon.png" alt="ClipLab Live"><span>ClipLab Live</span></div>
       <nav aria-label="Application navigation">
-        <a class="nav-item" href="#"><span class="nav-icon">⌂</span><span>Overview</span></a>
-        <a class="nav-item active" href="#"><span class="nav-icon">▶</span><span>Publish</span></a>
-        <a class="nav-item" href="#"><span class="nav-icon">▤</span><span>Clips</span></a>
-        <a class="nav-item" href="#"><span class="nav-icon">↗</span><span>Accounts</span></a>
-        <a class="nav-item" href="#"><span class="nav-icon">⚙</span><span>Settings</span></a>
+        <a class="nav-item" href="#"><span class="nav-icon">home</span><span>Overview</span></a>
+        <a class="nav-item active" href="#"><span class="nav-icon">play</span><span>Publish</span></a>
+        <a class="nav-item" href="#"><span class="nav-icon">clips</span><span>Clips</span></a>
+        <a class="nav-item" href="#"><span class="nav-icon">acct</span><span>Accounts</span></a>
+        <a class="nav-item" href="#"><span class="nav-icon">gear</span><span>Settings</span></a>
       </nav>
       <div class="aside-footer">ClipLab Live review build<br>Content Posting API</div>
     </aside>
@@ -138,7 +558,7 @@
               <video id="preview" src="./review-clip.mp4" controls playsinline muted preload="metadata"></video>
             </div>
             <div class="clip-meta">
-              <div class="meta-row"><span>Format</span><strong>Vertical MP4 · 1080 × 1920</strong></div>
+              <div class="meta-row"><span>Format</span><strong>Vertical MP4 | 1080 x 1920</strong></div>
               <div class="meta-row"><span>Duration</span><strong>00:24</strong></div>
               <div class="meta-row"><span>Captions</span><strong>Burned in</strong></div>
               <div class="meta-row"><span>Source credit</span><strong>Included</strong></div>
@@ -226,12 +646,12 @@ Credit: original streamer
 
   <div class="modal-backdrop" id="authModal" role="dialog" aria-modal="true" aria-labelledby="authTitle">
     <div class="auth-modal">
-      <div class="auth-brand"><span class="tiktok-mark">♪</span><span>TikTok Sandbox</span></div>
+      <div class="auth-brand"><span class="tiktok-mark">TT</span><span>TikTok Sandbox</span></div>
       <h2 id="authTitle">Authorize ClipLab Live</h2>
       <p>ClipLab Live is requesting access to your TikTok Sandbox test account.</p>
-      <div class="permission"><span>✓</span><div><strong>View basic profile</strong><span>Used to display and verify the connected account · user.info.basic</span></div></div>
-      <div class="permission"><span>✓</span><div><strong>Publish videos</strong><span>Used only after you confirm a clip · video.publish</span></div></div>
-      <div class="permission"><span>✓</span><div><strong>Upload video drafts</strong><span>Optional creator handoff · video.upload</span></div></div>
+      <div class="permission"><span>OK</span><div><strong>View basic profile</strong><span>Used to display and verify the connected account | user.info.basic</span></div></div>
+      <div class="permission"><span>OK</span><div><strong>Publish videos</strong><span>Used only after you confirm a clip | video.publish</span></div></div>
+      <div class="permission"><span>OK</span><div><strong>Upload video drafts</strong><span>Optional creator handoff | video.upload</span></div></div>
       <div class="auth-actions"><button class="cancel-auth" id="cancelAuth">Cancel</button><button class="allow-auth" id="allowAuth">Continue as @cliplablive</button></div>
     </div>
   </div>
@@ -272,16 +692,16 @@ Credit: original streamer
       activityState.textContent = 'Waiting';
       steps.forEach((step, index) => {
         step.className = 'step';
-        step.querySelector('span').textContent = ['Read basic profile','Create Direct Post session','Upload vertical MP4','Check publish result'][index];
+        step.querySelector('span').textContent = ['Read basic profile', 'Create Direct Post session', 'Upload vertical MP4', 'Check publish result'][index];
       });
     }
     async function runUpload() {
       if (running || !connected) return;
       running = true;
       publish.disabled = true;
-      publish.textContent = 'Uploading…';
+      publish.textContent = 'Uploading...';
       progressPanel.classList.add('show');
-      progressPanel.scrollIntoView({behavior:'smooth', block:'center'});
+      progressPanel.scrollIntoView({ behavior: 'smooth', block: 'center' });
       const sequence = [
         ['Authorizing with Login Kit', 0, 18, 'Reading @cliplablive with user.info.basic'],
         ['Account verified', 0, 28, 'Connected account verified'],
@@ -299,50 +719,51 @@ Credit: original streamer
         });
         setStep(stepIndex, i === sequence.length - 1 ? 'done' : 'active', detail);
         progressBar.style.width = `${percent}%`;
-        await wait(i === 0 ? 1100 : 1250);
+        await wait(i === 0 ? 700 : 650);
       }
-      steps.forEach(step => step.className = 'step done');
       result.classList.add('show');
-      publish.textContent = 'Published to Sandbox';
+      publish.textContent = 'Published';
+      publish.disabled = true;
       running = false;
     }
-    async function runReviewerDemo() {
-      resetDemo();
-      window.scrollTo({top:0, behavior:'smooth'});
-      await wait(700);
-      openAuth();
-      await wait(1600);
-      completeAuth();
-      await wait(1200);
-      preview.muted = true;
-      preview.play().catch(() => {});
-      await wait(1800);
-      caption.focus();
-      caption.setSelectionRange(0, caption.value.length);
-      await wait(900);
-      caption.setSelectionRange(caption.value.length, caption.value.length);
-      document.getElementById('privacy').focus();
-      await wait(900);
-      await runUpload();
-    }
-    function openAuth() { document.getElementById('authModal').classList.add('show'); }
-    function completeAuth() {
-      connected = true;
+
+    caption.addEventListener('input', updateCount);
+    document.getElementById('connectTikTok').addEventListener('click', () => {
+      document.getElementById('authModal').classList.add('show');
+    });
+    document.getElementById('cancelAuth').addEventListener('click', () => {
       document.getElementById('authModal').classList.remove('show');
+    });
+    document.getElementById('allowAuth').addEventListener('click', () => {
+      document.getElementById('authModal').classList.remove('show');
+      connected = true;
       document.getElementById('accountName').textContent = '@cliplablive';
-      document.getElementById('accountDetail').textContent = 'TikTok Sandbox creator account';
+      document.getElementById('accountDetail').textContent = 'Sandbox user info verified';
       document.getElementById('connectTikTok').hidden = true;
       publish.disabled = false;
-    }
-    caption.addEventListener('input', updateCount);
-    publish.addEventListener('click', runUpload);
-    document.getElementById('connectTikTok').addEventListener('click', openAuth);
-    document.getElementById('cancelAuth').addEventListener('click', () => document.getElementById('authModal').classList.remove('show'));
-    document.getElementById('allowAuth').addEventListener('click', completeAuth);
+      progressPanel.classList.add('show');
+      activityState.textContent = 'Connected';
+      setStep(0, 'done', 'Connected account verified');
+    });
+    document.getElementById('changeClip').addEventListener('click', () => {
+      preview.pause();
+      preview.currentTime = 0;
+      preview.load();
+      resetDemo();
+    });
+    document.getElementById('publish').addEventListener('click', runUpload);
     document.getElementById('resetDemo').addEventListener('click', resetDemo);
-    document.getElementById('autoDemo').addEventListener('click', runReviewerDemo);
-    document.getElementById('changeClip').addEventListener('click', () => alert('Clip library opened. The selected clip remains unchanged in this review demo.'));
+    document.getElementById('autoDemo').addEventListener('click', async () => {
+      resetDemo();
+      document.getElementById('connectTikTok').click();
+      await wait(250);
+      document.getElementById('allowAuth').click();
+      await wait(250);
+      runUpload();
+    });
+
     updateCount();
+    resetDemo();
   </script>
 </body>
 </html>
