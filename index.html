@@ -4,207 +4,384 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>ClipLab Live</title>
-  <meta name="description" content="ClipLab Live is a creator publishing platform for short-form livestream highlights.">
+  <meta name="description" content="ClipLab Live creator publishing dashboard">
   <link rel="icon" href="./favicon.ico" sizes="any">
   <link rel="icon" type="image/png" href="./clipbot-icon-32.png" sizes="32x32">
-  <link rel="apple-touch-icon" href="./clipbot-icon-192.png">
   <style>
     :root {
       color-scheme: dark;
-      --bg: #101114;
-      --panel: #181a20;
-      --text: #f4f4f5;
-      --muted: #c4c7cf;
-      --accent: #29d8ff;
-      --accent-2: #ff514f;
-      --line: #2a2d35;
+      --bg: #0e0f12;
+      --surface: #17191e;
+      --surface-2: #1f2229;
+      --line: #30333c;
+      --text: #f5f6f8;
+      --muted: #aeb3bd;
+      --cyan: #25d7ed;
+      --pink: #fe2c55;
+      --green: #3ddc97;
+      --amber: #ffc857;
     }
     * { box-sizing: border-box; }
     body {
       margin: 0;
-      font-family: Arial, Helvetica, sans-serif;
       background: var(--bg);
       color: var(--text);
-      line-height: 1.55;
+      font: 14px/1.45 Arial, Helvetica, sans-serif;
     }
-    header, main, footer {
-      width: min(980px, calc(100% - 32px));
-      margin: 0 auto;
+    a { color: var(--cyan); text-decoration: none; }
+    .app {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 220px minmax(0, 1fr);
     }
-    header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 24px;
-      padding: 24px 0;
-      border-bottom: 1px solid var(--line);
+    aside {
+      border-right: 1px solid var(--line);
+      padding: 20px 14px;
+      background: #121317;
+      position: sticky;
+      top: 0;
+      height: 100vh;
     }
     .brand {
       display: flex;
       align-items: center;
-      gap: 12px;
-      color: var(--text);
-      font-size: 22px;
+      gap: 11px;
+      padding: 0 8px 22px;
+      font-size: 18px;
       font-weight: 800;
-      letter-spacing: 0;
+      color: var(--text);
     }
-    .brand img {
-      width: 44px;
-      height: 44px;
-      border-radius: 50%;
-      display: block;
-    }
-    nav {
+    .brand img { width: 36px; height: 36px; border-radius: 50%; }
+    nav { display: grid; gap: 4px; }
+    .nav-item {
       display: flex;
-      gap: 18px;
-      flex-wrap: wrap;
-    }
-    a {
-      color: var(--accent);
-      text-decoration: none;
-      font-weight: 700;
-    }
-    main {
-      padding: 58px 0 52px;
-    }
-    h1 {
-      max-width: 820px;
-      margin: 0 0 18px;
-      font-size: clamp(36px, 6vw, 64px);
-      line-height: 1.03;
-      letter-spacing: 0;
-    }
-    .lead {
-      max-width: 800px;
-      margin: 0 0 38px;
+      align-items: center;
+      gap: 11px;
+      min-height: 42px;
+      padding: 0 12px;
       color: var(--muted);
-      font-size: 20px;
+      border-radius: 6px;
+      text-decoration: none;
+      font-weight: 650;
+    }
+    .nav-item.active { background: var(--surface-2); color: var(--text); }
+    .nav-icon {
+      width: 18px;
+      text-align: center;
+      font-size: 12px;
+      text-transform: uppercase;
+    }
+    .aside-footer {
+      position: absolute;
+      left: 14px;
+      right: 14px;
+      bottom: 18px;
+      border-top: 1px solid var(--line);
+      padding-top: 16px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+    main { min-width: 0; }
+    header {
+      height: 68px;
+      border-bottom: 1px solid var(--line);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 0 28px;
+      background: rgba(14, 15, 18, 0.96);
+      position: sticky;
+      top: 0;
+      z-index: 5;
+    }
+    header h1 { margin: 0; font-size: 19px; }
+    .environment {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+    .badge {
+      color: var(--amber);
+      border: 1px solid #625329;
+      padding: 4px 8px;
+      border-radius: 999px;
+      font-weight: 750;
+    }
+    .content { max-width: 1320px; margin: 0 auto; padding: 26px 28px 44px; }
+    .notice {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 12px 14px;
+      border: 1px solid #345c63;
+      background: #10262a;
+      border-radius: 6px;
+      margin-bottom: 20px;
+    }
+    .notice strong { color: var(--cyan); }
+    .workspace {
+      display: grid;
+      grid-template-columns: minmax(280px, 380px) minmax(420px, 1fr);
+      gap: 22px;
+      align-items: start;
+    }
+    .panel {
+      border: 1px solid var(--line);
+      background: var(--surface);
+      border-radius: 8px;
+    }
+    .panel-head {
+      min-height: 54px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 0 16px;
+      border-bottom: 1px solid var(--line);
+    }
+    .panel-head h2 { margin: 0; font-size: 15px; }
+    .video-wrap { background: #090a0c; padding: 16px; display: flex; justify-content: center; }
+    video {
+      display: block;
+      width: min(100%, 268px);
+      aspect-ratio: 9 / 16;
+      object-fit: cover;
+      background: #050506;
+      border: 1px solid #272a31;
+    }
+    .clip-meta { padding: 14px 16px 16px; display: grid; gap: 8px; }
+    .meta-row { display: flex; justify-content: space-between; gap: 12px; color: var(--muted); }
+    .meta-row strong { color: var(--text); font-weight: 650; text-align: right; }
+    .status-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--green); margin-right: 6px; }
+    .form { padding: 16px; display: grid; gap: 16px; }
+    .account {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      padding: 13px;
+      background: #111317;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+    }
+    .account-main { display: flex; align-items: center; gap: 11px; min-width: 0; }
+    .avatar {
+      width: 38px; height: 38px; border-radius: 50%;
+      display: grid; place-items: center;
+      color: #061014;
+      background: linear-gradient(135deg, var(--cyan), #fff 48%, var(--pink) 52%);
+      font-weight: 900;
+    }
+    .account-copy strong, .account-copy span { display: block; }
+    .account-copy span { color: var(--muted); font-size: 12px; }
+    .connect-btn {
+      min-height: 34px;
+      border: 0;
+      border-radius: 5px;
+      padding: 0 12px;
+      background: #fff;
+      color: #111;
+      font-weight: 800;
+    }
+    label { display: grid; gap: 7px; color: var(--muted); font-size: 12px; font-weight: 650; }
+    input, textarea, select {
+      width: 100%;
+      border: 1px solid var(--line);
+      background: #101216;
+      color: var(--text);
+      border-radius: 6px;
+      padding: 10px 11px;
+      outline: none;
+    }
+    textarea { min-height: 96px; resize: vertical; }
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .switches { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+    .switch {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      padding: 10px;
+      color: var(--muted);
+    }
+    .switch input { width: 16px; height: 16px; accent-color: var(--cyan); }
+    .scope-box { display: flex; flex-wrap: wrap; gap: 7px; }
+    .scope {
+      border: 1px solid var(--line);
+      background: #111317;
+      color: #cdd2db;
+      padding: 5px 8px;
+      border-radius: 4px;
+      font: 11px Consolas, monospace;
     }
     .actions {
       display: flex;
-      gap: 14px;
-      flex-wrap: wrap;
-      margin-bottom: 44px;
-    }
-    .button {
-      display: inline-flex;
       align-items: center;
-      min-height: 44px;
-      padding: 0 18px;
+      justify-content: flex-end;
+      gap: 10px;
+      border-top: 1px solid var(--line);
+      padding: 16px;
+    }
+    .btn {
+      min-height: 40px;
+      border: 0;
       border-radius: 6px;
-      background: var(--accent);
-      color: #061116;
-      font-weight: 800;
+      padding: 0 15px;
+      font-weight: 750;
     }
-    .button.secondary {
-      background: transparent;
-      color: var(--text);
+    .btn.secondary { background: transparent; color: var(--text); border: 1px solid var(--line); }
+    .btn.primary { background: var(--pink); color: white; min-width: 178px; }
+    .info-grid {
+      margin-top: 22px;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+    }
+    .info-card {
       border: 1px solid var(--line);
+      background: var(--surface);
+      border-radius: 8px;
+      padding: 16px;
+      min-height: 112px;
     }
-    section {
-      padding: 28px 0;
-      border-top: 1px solid var(--line);
+    .info-card h3 { margin: 0 0 6px; font-size: 15px; }
+    .info-card p { margin: 0; color: var(--muted); }
+    .info-card strong { display: block; margin-top: 10px; font-size: 20px; }
+    @media (max-width: 900px) {
+      .app { grid-template-columns: 72px minmax(0, 1fr); }
+      .brand span, .nav-item span:not(.nav-icon), .aside-footer { display: none; }
+      aside { padding-inline: 8px; }
+      .nav-item { justify-content: center; padding: 0; }
+      .workspace { grid-template-columns: 1fr; }
+      .info-grid { grid-template-columns: 1fr; }
+      .video-wrap { max-height: 580px; }
+      video { height: 520px; width: auto; }
     }
-    h2 {
-      margin: 0 0 12px;
-      font-size: 24px;
-      letter-spacing: 0;
-    }
-    p, li {
-      color: var(--muted);
-      font-size: 16px;
-    }
-    ul {
-      padding-left: 20px;
-      margin: 12px 0 0;
-    }
-    footer {
-      padding: 26px 0 42px;
-      border-top: 1px solid var(--line);
-      color: var(--muted);
-      font-size: 14px;
-    }
-    @media (max-width: 680px) {
-      header { align-items: flex-start; flex-direction: column; }
-      main { padding-top: 40px; }
+    @media (max-width: 620px) {
+      header { padding: 0 16px; }
+      .content { padding: 18px 14px 80px; }
+      .two-col, .switches { grid-template-columns: 1fr; }
+      .notice { align-items: flex-start; flex-direction: column; }
+      .actions { align-items: stretch; flex-direction: column-reverse; }
+      .btn { width: 100%; }
     }
   </style>
 </head>
 <body>
-  <header>
-    <a class="brand" href="./index.html" aria-label="ClipLab Live home">
-      <img src="./clipbot-icon.png" alt="ClipLab Live app icon">
-      <span>ClipLab Live</span>
-    </a>
-    <nav aria-label="Site links">
-      <a href="./privacy-policy.html">Privacy Policy</a>
-      <a href="./terms-of-service.html">Terms of Service</a>
-      <a href="./demo.html">Demo</a>
-      <a href="mailto:solet3rminator@gmail.com">Contact</a>
-    </nav>
-  </header>
+  <div class="app">
+    <aside>
+      <div class="brand"><img src="./clipbot-icon.png" alt="ClipLab Live"><span>ClipLab Live</span></div>
+      <nav aria-label="Application navigation">
+        <a class="nav-item active" href="./index.html"><span class="nav-icon">home</span><span>Overview</span></a>
+        <a class="nav-item" href="./demo.html"><span class="nav-icon">play</span><span>Publishing</span></a>
+        <a class="nav-item" href="./privacy-policy.html"><span class="nav-icon">policy</span><span>Privacy</span></a>
+        <a class="nav-item" href="./terms-of-service.html"><span class="nav-icon">tos</span><span>Terms</span></a>
+      </nav>
+      <div class="aside-footer">ClipLab Live review build<br>Public dashboard</div>
+    </aside>
 
-  <main>
-    <p style="margin:0 0 14px;color:var(--accent);font-weight:800;text-transform:uppercase;letter-spacing:.08em;font-size:12px;">Public website</p>
-    <h1>ClipLab Live</h1>
-    <p class="lead">
-      Short-form livestream highlights for creators and publishing teams. ClipLab Live
-      helps creators turn approved livestream moments into vertical clips with captions,
-      titles, hashtags, source credit, and platform-ready publishing.
-    </p>
-    <p class="lead" style="font-size:16px;margin-top:-18px;">
-      No login is required to view this website, the privacy policy, the terms of service,
-      or the public demo pages.
-    </p>
-    <div class="actions">
-      <a class="button" href="mailto:solet3rminator@gmail.com">Request Access</a>
-      <a class="button secondary" href="./privacy-policy.html">Review Privacy Policy</a>
-    </div>
+    <main>
+      <header>
+        <h1>Control Panel</h1>
+        <div class="environment"><span>Public site</span><span class="badge">No login required</span></div>
+      </header>
 
-    <section>
-      <h2>What The Platform Does</h2>
-      <p>
-        ClipLab Live provides a workflow for preparing short video highlights from creator
-        livestreams and distributing approved clips to connected social accounts. The
-        platform focuses on vertical formatting, readable captions, metadata, and reliable
-        upload tracking.
-      </p>
-    </section>
+      <div class="content">
+        <div class="notice">
+          <div><strong>Public dashboard is live.</strong> The root page now opens on an operational control panel instead of a marketing landing page.</div>
+          <span class="badge">ClipLab Live</span>
+        </div>
 
-    <section>
-      <h2>TikTok Integration</h2>
-      <p>
-        The TikTok integration uses OAuth authorization and the Content Posting API so an
-        authenticated creator or authorized publishing team can upload approved videos to
-        the connected TikTok account. Requested TikTok scopes are limited to basic account
-        identification and video upload/publish permissions needed for this workflow.
-        ClipLab Live does not request account passwords and does not publish without
-        platform authorization.
-      </p>
-    </section>
+        <div class="workspace">
+          <section class="panel" aria-label="Selected video">
+            <div class="panel-head"><h2>Selected clip</h2><span><span class="status-dot"></span>Ready</span></div>
+            <div class="video-wrap">
+              <video id="preview" src="./review-clip.mp4" controls playsinline muted preload="metadata"></video>
+            </div>
+            <div class="clip-meta">
+              <div class="meta-row"><span>Format</span><strong>Vertical MP4 | 1080 x 1920</strong></div>
+              <div class="meta-row"><span>Duration</span><strong>00:24</strong></div>
+              <div class="meta-row"><span>Captions</span><strong>Burned in</strong></div>
+              <div class="meta-row"><span>Source credit</span><strong>Included</strong></div>
+            </div>
+          </section>
 
-    <section>
-      <h2>Publishing Controls</h2>
-      <ul>
-        <li>OAuth is required before TikTok uploads are available.</li>
-        <li>Generated captions, titles, source credit, and hashtags are stored with each clip.</li>
-        <li>Publishing status is tracked so failed uploads can be reviewed and retried.</li>
-        <li>Local generated video files can be deleted after successful publishing.</li>
-      </ul>
-    </section>
+          <section class="panel" aria-label="Publishing settings">
+            <div class="panel-head"><h2>Post settings</h2><span class="badge">Draft saved</span></div>
+            <div class="form">
+              <div class="account">
+                <div class="account-main">
+                  <div class="avatar">T</div>
+                  <div class="account-copy"><strong>@cliplablive</strong><span>Sandbox account connected</span></div>
+                </div>
+                <button class="connect-btn" type="button">Connected</button>
+              </div>
 
-    <section>
-      <h2>Responsible Use</h2>
-      <p>
-        Users must publish only content they own, are authorized to use, or are otherwise
-        permitted to distribute. ClipLab Live is designed for lawful creator publishing and
-        respects platform policies, takedown requests, and source attribution requirements.
-      </p>
-    </section>
-  </main>
+              <label>Caption
+                <textarea readonly>That ending was completely unexpected.
 
-  <footer>
-    <span>ClipLab Live - Creator publishing platform. Contact: solet3rminator@gmail.com</span>
-  </footer>
+Credit: original streamer
+#gaming #streamclips #livestream #cliplablive</textarea>
+              </label>
+
+              <div class="two-col">
+                <label>Visibility
+                  <select disabled>
+                    <option selected>Only me (Sandbox test)</option>
+                  </select>
+                </label>
+                <label>Content disclosure
+                  <select disabled><option selected>Not branded content</option></select>
+                </label>
+              </div>
+
+              <div class="switches" aria-label="TikTok interaction settings">
+                <label class="switch">Comments <input type="checkbox" checked disabled></label>
+                <label class="switch">Duet <input type="checkbox" checked disabled></label>
+                <label class="switch">Stitch <input type="checkbox" checked disabled></label>
+              </div>
+
+              <label>Authorized TikTok capabilities</label>
+              <div class="scope-box">
+                <span class="scope">Login Kit</span>
+                <span class="scope">user.info.basic</span>
+                <span class="scope">Content Posting API</span>
+                <span class="scope">video.publish</span>
+                <span class="scope">video.upload</span>
+              </div>
+            </div>
+            <div class="actions">
+              <button class="btn secondary" type="button" onclick="location.href='./demo.html'">Open publishing view</button>
+              <button class="btn primary" type="button" onclick="location.href='mailto:solet3rminator@gmail.com'">Contact support</button>
+            </div>
+          </section>
+        </div>
+
+        <section class="info-grid" aria-label="Status cards">
+          <div class="info-card">
+            <h3>Website status</h3>
+            <p>Root page now loads the operational dashboard directly.</p>
+            <strong>Public</strong>
+          </div>
+          <div class="info-card">
+            <h3>TikTok integration</h3>
+            <p>Login Kit and Content Posting API are shown from the dashboard itself.</p>
+            <strong>Ready</strong>
+          </div>
+          <div class="info-card">
+            <h3>Review posture</h3>
+            <p>No login wall, no marketing hero, and no hidden content on the root URL.</p>
+            <strong>Clean</strong>
+          </div>
+        </section>
+      </div>
+    </main>
+  </div>
 </body>
 </html>
